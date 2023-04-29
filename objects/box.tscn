@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmncbnlwcrmk8"]
+
+[ext_resource type="Texture2D" uid="uid://bd48s2kywab0j" path="res://assets/box.svg" id="1_ie0cn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m5t1r"]
+size = Vector2(64, 64)
+
+[node name="Box" type="RigidBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_m5t1r")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
+
+[node name="Box" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+texture = ExtResource("1_ie0cn")

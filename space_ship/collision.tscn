@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://batynujmyxnv7"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D"]
+build_mode = 1
+polygon = PackedVector2Array(45, 45, 317, 45, 317, 725, 45, 725)

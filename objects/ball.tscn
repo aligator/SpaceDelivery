@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dykfwuv1coid1"]
+
+[ext_resource type="Texture2D" uid="uid://gc8y7brk87ox" path="res://assets/ball.svg" id="1_ax7aw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q1r4u"]
+radius = 32.0
+
+[node name="Ball" type="RigidBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(32, 32)
+shape = SubResource("CircleShape2D_q1r4u")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
+
+[node name="Ball" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+texture = ExtResource("1_ax7aw")

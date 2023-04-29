@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://4csvsrllbajr"]
+
+[ext_resource type="Texture2D" uid="uid://bd48s2kywab0j" path="res://assets/box.svg" id="1_2poo2"]
+[ext_resource type="Script" path="res://space_ship/space_ship.gd" id="1_ibr4t"]
+[ext_resource type="PackedScene" uid="uid://batynujmyxnv7" path="res://space_ship/collision.tscn" id="1_nxlyw"]
+[ext_resource type="Texture2D" uid="uid://hhxox2ym7exf" path="res://assets/red.png" id="4_ykdi8"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_efwpq"]
+
+[sub_resource type="GDScript" id="GDScript_6wedi"]
+script/source = "@tool
+
+extends Sprite2D
+
+@onready var spaceShip: RigidBody2D =  get_owner()
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	position = spaceShip.center_of_mass
+
+"
+
+[node name="SpaceShip" type="RigidBody2D"]
+position = Vector2(-3, -320)
+mass = 10.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, -300)
+physics_material_override = SubResource("PhysicsMaterial_efwpq")
+script = ExtResource("1_ibr4t")
+metadata/_edit_vertical_guides_ = []
+
+[node name="CollisionPolygon2D" parent="." instance=ExtResource("1_nxlyw")]
+position = Vector2(2, -2)
+polygon = PackedVector2Array(-128, -320, 128, -320, 128, 320, 64, 320, 18, 320, 18, 336, 11, 336, 11, 320, -11, 320, -11, 336, 18, 336, 18, 340, -11, 340, -18, 340, -18, 320, -128, 320)
+
+[node name="SpaceShip" type="Sprite2D" parent="."]
+position = Vector2(0, 1)
+scale = Vector2(4, 10)
+texture = ExtResource("1_2poo2")
+
+[node name="CenterOfMass" type="Sprite2D" parent="."]
+position = Vector2(0, -300)
+texture = ExtResource("4_ykdi8")
+script = SubResource("GDScript_6wedi")
