@@ -22,6 +22,7 @@ func countUp():
 func _on_pressed():
 	if ui.isInEditMode:
 		var newObject: Node2D = scene.instantiate()
+		newObject.position.y -= 100
 		ship.add_child(newObject)
 		newObject.tree_exited.connect(countUp)
 		count -= 1

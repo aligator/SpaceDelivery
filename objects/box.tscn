@@ -12,7 +12,7 @@ position = Vector2(-32, -32)
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
 collision_layer = 3
 input_pickable = true
-mass = 10.0
+mass = 5.0
 script = ExtResource("1_30ksu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]

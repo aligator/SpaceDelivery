@@ -11,13 +11,14 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x1v6m"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6oinw"]
-radius = 22.0
+radius = 18.0
 
 [node name="SpaceShip" type="Node2D"]
 position = Vector2(6, -320)
 script = ExtResource("1_ibr4t")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
+collision_mask = 5
 mass = 10.0
 center_of_mass_mode = 1
 center_of_mass = Vector2(0, -300)
@@ -32,14 +33,18 @@ texture = ExtResource("2_8j81e")
 
 [node name="CollisionPolygon2D" parent="RigidBody2D" instance=ExtResource("1_nxlyw")]
 position = Vector2(-3, 0)
-polygon = PackedVector2Array(-128, -320, 0, -502, 128, -320, 128, 320, 64, 320, 41, 320, 41, 341, 41, 391, 25, 391, -45, 391, -45, 376, -45, 320, -25, 320, -25, 376, 20, 376, 20, 320, -23, 320, -45, 320, -128, 320, -128, -45)
+build_mode = 0
+polygon = PackedVector2Array(-233, -338, -3, -655, 230, -336, 115, -337, 0, -503, -128, -319, -129, -225, -129, -202, -3, -202, -3, -188, -129, -188, -128, -45, 128, -45, 128, -322, -5, -322, -5, -337, 115, -337, 230, -336, 284, -202, 257, -46, 217, 81, -222, 106, -254, 73, -233, -22, -233, -187)
 
-[node name="CollisionPolygon2D2" parent="RigidBody2D" instance=ExtResource("1_nxlyw")]
+[node name="BottomCollision" parent="RigidBody2D" instance=ExtResource("1_nxlyw")]
 position = Vector2(-3, 0)
-polygon = PackedVector2Array(-128, -320, 0, -502, 128, -320, 127, -45, -128, -45)
+build_mode = 0
+polygon = PackedVector2Array(41, 320, 41, 341, 41, 391, 25, 391, -45, 391, -45, 376, -45, 302, -25, 268, -5, 200, 14, 262, 41, 302, 41, 320, -25, 320.141, -25, 366, 20, 366, 20, 320)
 
 [node name="BottomCollision" type="StaticBody2D" parent="."]
 position = Vector2(-326, -670)
+collision_layer = 4
+collision_mask = 4
 physics_material_override = SubResource("PhysicsMaterial_x1v6m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomCollision"]
