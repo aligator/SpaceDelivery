@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=5 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="PackedScene" uid="uid://4csvsrllbajr" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
 [ext_resource type="PackedScene" uid="uid://bmncbnlwcrmk8" path="res://objects/box.tscn" id="2_0gxck"]
+[ext_resource type="PackedScene" uid="uid://kiq1e5hkw3ty" path="res://ui.tscn" id="2_vho4v"]
 [ext_resource type="PackedScene" uid="uid://dykfwuv1coid1" path="res://objects/ball.tscn" id="3_7t0o0"]
 
 [node name="World" type="Node2D"]
@@ -9,17 +10,12 @@
 [node name="SpaceShip" parent="." instance=ExtResource("1_t2rh0")]
 position = Vector2(320, 835)
 
+[node name="Box" parent="SpaceShip" instance=ExtResource("2_0gxck")]
+
 [node name="Ball" parent="SpaceShip" instance=ExtResource("3_7t0o0")]
-position = Vector2(27, 180)
+position = Vector2(-89, -225)
 
 [node name="Ball2" parent="SpaceShip" instance=ExtResource("3_7t0o0")]
-position = Vector2(-73, 170)
+position = Vector2(51, -167)
 
-[node name="Ball3" parent="SpaceShip" instance=ExtResource("3_7t0o0")]
-position = Vector2(48, -294)
-
-[node name="Box" parent="SpaceShip" instance=ExtResource("2_0gxck")]
-position = Vector2(64, 252)
-
-[node name="Box2" parent="SpaceShip" instance=ExtResource("2_0gxck")]
-position = Vector2(-124, 252)
+[node name="UI" parent="." instance=ExtResource("2_vho4v")]
