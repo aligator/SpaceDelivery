@@ -1,30 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=4 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="PackedScene" uid="uid://4csvsrllbajr" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
+[ext_resource type="PackedScene" uid="uid://bmncbnlwcrmk8" path="res://objects/box.tscn" id="2_0gxck"]
 [ext_resource type="PackedScene" uid="uid://dykfwuv1coid1" path="res://objects/ball.tscn" id="3_7t0o0"]
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0467y"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_bsiid"]
-radius = 6.0
 
 [node name="World" type="Node2D"]
 
 [node name="SpaceShip" parent="." instance=ExtResource("1_t2rh0")]
-position = Vector2(192, 391)
+position = Vector2(320, 835)
 
 [node name="Ball" parent="SpaceShip" instance=ExtResource("3_7t0o0")]
-position = Vector2(-102, -248)
+position = Vector2(27, 180)
 
 [node name="Ball2" parent="SpaceShip" instance=ExtResource("3_7t0o0")]
-position = Vector2(-74, -111)
+position = Vector2(-73, 170)
 
 [node name="Ball3" parent="SpaceShip" instance=ExtResource("3_7t0o0")]
-position = Vector2(6, -184)
+position = Vector2(48, -294)
 
-[node name="BottomCollision" type="StaticBody2D" parent="."]
-physics_material_override = SubResource("PhysicsMaterial_0467y")
+[node name="Box" parent="SpaceShip" instance=ExtResource("2_0gxck")]
+position = Vector2(64, 252)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomCollision"]
-position = Vector2(194, 718)
-shape = SubResource("CircleShape2D_bsiid")
+[node name="Box2" parent="SpaceShip" instance=ExtResource("2_0gxck")]
+position = Vector2(-124, 252)

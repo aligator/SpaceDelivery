@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-@export var power: float = 15000
+@export var power: float = 25000
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -1,31 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://4csvsrllbajr"]
+[gd_scene load_steps=8 format=3 uid="uid://4csvsrllbajr"]
 
-[ext_resource type="Texture2D" uid="uid://bd48s2kywab0j" path="res://assets/box.svg" id="1_2poo2"]
 [ext_resource type="Script" path="res://space_ship/space_ship.gd" id="1_ibr4t"]
 [ext_resource type="PackedScene" uid="uid://batynujmyxnv7" path="res://space_ship/collision.tscn" id="1_nxlyw"]
-[ext_resource type="Texture2D" uid="uid://hhxox2ym7exf" path="res://assets/red.png" id="4_ykdi8"]
+[ext_resource type="Texture2D" uid="uid://dcrmiuc6hbmpo" path="res://assets/rocket.png" id="2_8j81e"]
+[ext_resource type="Texture2D" uid="uid://hhxox2ym7exf" path="res://assets/red.png" id="4_3g2xk"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_efwpq"]
 
-[sub_resource type="GDScript" id="GDScript_6wedi"]
-script/source = "@tool
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x1v6m"]
 
-extends Sprite2D
+[sub_resource type="CircleShape2D" id="CircleShape2D_6oinw"]
+radius = 22.0
 
-@onready var spaceShip: RigidBody2D =  get_owner()
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+[node name="SpaceShip" type="Node2D"]
+position = Vector2(0, -318)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	position = spaceShip.center_of_mass
-
-"
-
-[node name="SpaceShip" type="RigidBody2D"]
-position = Vector2(-3, -320)
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
 mass = 10.0
 center_of_mass_mode = 1
 center_of_mass = Vector2(0, -300)
@@ -33,16 +23,23 @@ physics_material_override = SubResource("PhysicsMaterial_efwpq")
 script = ExtResource("1_ibr4t")
 metadata/_edit_vertical_guides_ = []
 
-[node name="CollisionPolygon2D" parent="." instance=ExtResource("1_nxlyw")]
+[node name="Rocket" type="Sprite2D" parent="RigidBody2D"]
+position = Vector2(1.99999, -30)
+scale = Vector2(0.705714, 0.781519)
+texture = ExtResource("2_8j81e")
+
+[node name="CollisionPolygon2D" parent="RigidBody2D" instance=ExtResource("1_nxlyw")]
 position = Vector2(2, -2)
-polygon = PackedVector2Array(-128, -320, 128, -320, 128, 320, 64, 320, 18, 320, 18, 336, 11, 336, 11, 320, -11, 320, -11, 336, 18, 336, 18, 340, -11, 340, -18, 340, -18, 320, -128, 320)
+polygon = PackedVector2Array(-128, -320, 0, -502, 128, -320, 128, 320, 64, 320, 41, 319, 41, 341, 41, 391, 30, 391, -45, 391, -45, 377, -45, 329, -42, 329, -23, 329, -23, 376, 25, 376, 25, 329, -23, 329, -45, 329, -45, 320, -128, 320)
 
-[node name="SpaceShip" type="Sprite2D" parent="."]
-position = Vector2(0, 1)
-scale = Vector2(4, 10)
-texture = ExtResource("1_2poo2")
+[node name="BottomCollision" type="StaticBody2D" parent="."]
+position = Vector2(-326, -670)
+physics_material_override = SubResource("PhysicsMaterial_x1v6m")
 
-[node name="CenterOfMass" type="Sprite2D" parent="."]
-position = Vector2(0, -300)
-texture = ExtResource("4_ykdi8")
-script = SubResource("GDScript_6wedi")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomCollision"]
+position = Vector2(328, 1021)
+shape = SubResource("CircleShape2D_6oinw")
+
+[node name="Red" type="Sprite2D" parent="BottomCollision/CollisionShape2D"]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_3g2xk")
