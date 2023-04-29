@@ -15,7 +15,7 @@ position = Vector2(-32, -32)
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
 collision_layer = 3
 input_pickable = true
-mass = 4.0
+mass = 50.0
 physics_material_override = SubResource("PhysicsMaterial_ql2by")
 script = ExtResource("1_xr6lr")
 
@@ -27,5 +27,10 @@ debug_color = Color(0, 0.6, 0.701961, 0.419608)
 [node name="Ball" type="Sprite2D" parent="RigidBody2D"]
 position = Vector2(32, 32)
 texture = ExtResource("1_ax7aw")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="RigidBody2D"]
+position = Vector2(32, 32)
+scale = Vector2(3.2, 3.2)
+enable_node_path = NodePath("../..")
 
 [connection signal="input_event" from="RigidBody2D" to="RigidBody2D" method="_on_input_event"]

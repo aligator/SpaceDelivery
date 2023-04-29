@@ -1,6 +1,15 @@
-extends RigidBody2D
+extends Node2D
 
-@export var power: float = 25000
+@export var power: float = 25
+
+@export var targetSpeed: float = 0
+@export var speed: float = 0
+@export var acceleration: float = 500
+
+@onready var rigid: RigidBody2D = $RigidBody2D
+
+func start():
+	targetSpeed = 1000
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -9,11 +18,14 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var direction = rotation + deg_to_rad(-180)	
+	if speed < targetSpeed:
+		speed += acceleration * delta
+	elif speed > targetSpeed:
+		speed -= acceleration * delta
+
+	var direction = rigid.rotation + deg_to_rad(-180)	
 
 	if Input.is_action_pressed("ui_left"):
-		apply_force(Vector2(cos(direction), sin(direction)) * power, center_of_mass)	
+		rigid.apply_force(Vector2(cos(direction), sin(direction)) * (power * speed), rigid.center_of_mass)	
 	if Input.is_action_pressed("ui_right"):
-		apply_force(Vector2(cos(direction), sin(direction)) * -power, center_of_mass)
-		
-	
+		rigid.apply_force(Vector2(cos(direction), sin(direction)) * (power * -speed), rigid.center_of_mass)

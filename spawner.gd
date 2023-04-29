@@ -1,6 +1,8 @@
 extends TextureButton
 
 @export var scene: PackedScene
+@export var count: int = 5
+
 @onready var ship = get_tree().root.get_node("/root/World/SpaceShip")
 @onready var ui = get_owner()
 
@@ -11,11 +13,16 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	disabled = count <= 0
 
+func countUp():
+	if ui.isInEditMode:
+		count += 1
 
 func _on_pressed():
 	if ui.isInEditMode:
-		var newObject = scene.instantiate()
+		var newObject: Node2D = scene.instantiate()
 		ship.add_child(newObject)
+		newObject.tree_exited.connect(countUp)
+		count -= 1
 
