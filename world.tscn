@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=15 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_kb1il"]
 [ext_resource type="PackedScene" uid="uid://bsm7lmyeoxad8" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
@@ -160,6 +160,25 @@ func _process(delta):
 	pass
 "
 
+[sub_resource type="GDScript" id="GDScript_ngoo0"]
+script/source = "extends Button
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+
+func _on_pressed():
+	get_tree().reload_current_scene()
+	pass # Replace with function body.
+"
+
 [node name="World" type="Node2D"]
 script = ExtResource("1_kb1il")
 
@@ -275,11 +294,21 @@ script = SubResource("GDScript_ymu0u")
 offset_left = 84.0
 offset_top = 98.0
 offset_right = 1088.0
-offset_bottom = 624.0
+offset_bottom = 536.0
 theme = ExtResource("3_o3j68")
 theme_override_font_sizes/font_size = 28
 text = "asedf"
 script = SubResource("GDScript_583vw")
 
+[node name="RestartButton" type="Button" parent="HighscoreList"]
+offset_left = 360.0
+offset_top = 552.0
+offset_right = 834.0
+offset_bottom = 637.0
+theme = ExtResource("3_o3j68")
+text = "RESTART"
+script = SubResource("GDScript_ngoo0")
+
 [connection signal="timeout" from="EnemyTimer" to="EnemyTimer" method="_on_timeout"]
 [connection signal="pressed" from="Highscore/Button" to="Highscore/Button" method="_on_pressed"]
+[connection signal="pressed" from="HighscoreList/RestartButton" to="HighscoreList/RestartButton" method="_on_pressed"]
