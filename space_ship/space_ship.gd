@@ -1,5 +1,7 @@
 extends Node2D
 
+@export var maxFuel: float = 120
+@export var fuel: float = 120
 @export var power: float = 1000
 @onready var rigid: RigidBody2D = $RigidBody2D
 @onready var explosion: CPUParticles2D = $RigidBody2D/Explosion
@@ -18,32 +20,39 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-	
+
 func _physics_process(delta):
 	if rigid.gravity_scale > 0:
-		rigid.gravity_scale = 1 - (-rigid.position.y + 164) / 10000 
+		rigid.gravity_scale = 1 - (-rigid.position.y + 164) / 50000 
 	else: 
 		rigid.gravity_scale = 0
 
-	if Input.is_action_pressed("ui_up"):
+	if Input.is_action_pressed("ui_up") && fuel > 0:
 		var direction = rigid.rotation + deg_to_rad(270)	
 		rigid.apply_force(Vector2(cos(direction), sin(direction)) * (power), rigid.center_of_mass)	
-	
-	if Input.is_action_pressed("ui_left"):
+		fuel-=delta
+		
+	if Input.is_action_pressed("ui_left") && fuel > 0:
 		rigid.apply_torque(-100)
-	if Input.is_action_pressed("ui_right"):
+		fuel-=delta
+		
+	if Input.is_action_pressed("ui_right") && fuel > 0:
 		rigid.apply_torque(100)
+		fuel-=delta
+		
+	if fuel < 0:
+		fuel = 0
 
+	if rigid.position.x <= -500 || rigid.position.x >= 570:
+		die()
+	
 func die():
 	if isDying:
 		return
-		
-	isDying = true	
+	print("kill")
+	isDying = true
 	explosion.restart()
 	killTimer.start()
-
-func _on_area_2d_body_exited(body):
-	die()
-
+	
 func _on_kill_timer_timeout():
 	queue_free()

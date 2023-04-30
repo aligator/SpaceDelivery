@@ -1,18 +1,28 @@
 [gd_scene load_steps=6 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="PackedScene" uid="uid://bsm7lmyeoxad8" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
+[ext_resource type="Theme" uid="uid://5k0w5l0f72d5" path="res://theme.tres" id="3_o3j68"]
 [ext_resource type="Texture2D" uid="uid://c1hxe34ojo6jk" path="res://assets/background.svg" id="6_ynu3v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ebwnq"]
 size = Vector2(2132, 231)
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_8b1qf"]
-normal = Vector2(-1, 0)
-distance = 0.01
+[sub_resource type="GDScript" id="GDScript_p4vrl"]
+script/source = "extends ProgressBar
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_k3jei"]
-normal = Vector2(1, 0)
-distance = 1152.0
+@onready var spaceShip = get_node(\"/root/World/SpaceShip\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	max_value = spaceShip.maxFuel
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	value = spaceShip.fuel
+	pass
+"
 
 [node name="World" type="Node2D"]
 
@@ -37,15 +47,26 @@ texture_repeat = 2
 texture = ExtResource("6_ynu3v")
 centered = false
 
-[node name="OutOfWorldLeft" type="Area2D" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="OutOfWorldLeft"]
-shape = SubResource("WorldBoundaryShape2D_8b1qf")
+[node name="HBoxContainer" type="HBoxContainer" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 20.0
+offset_right = 20.0
+offset_bottom = 60.0
+grow_horizontal = 2
 
-[node name="OutOfWorldRight" type="Area2D" parent="."]
+[node name="Label" type="Label" parent="UI/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_o3j68")
+text = "Fuel"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="OutOfWorldRight"]
-shape = SubResource("WorldBoundaryShape2D_k3jei")
-
-[connection signal="body_exited" from="OutOfWorldLeft" to="SpaceShip" method="_on_area_2d_body_exited"]
-[connection signal="body_exited" from="OutOfWorldRight" to="SpaceShip" method="_on_area_2d_body_exited"]
+[node name="ProgressBar" type="ProgressBar" parent="UI/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme = ExtResource("3_o3j68")
+max_value = 30.0
+script = SubResource("GDScript_p4vrl")
