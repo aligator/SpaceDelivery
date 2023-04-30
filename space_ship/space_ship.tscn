@@ -21,15 +21,6 @@ max_contacts_reported = 1
 contact_monitor = true
 metadata/_edit_vertical_guides_ = []
 
-[node name="Rocket" type="Sprite2D" parent="RigidBody2D"]
-position = Vector2(0, -63.425)
-scale = Vector2(0.1, 0.0993344)
-texture = ExtResource("2_8j81e")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RigidBody2D"]
-position = Vector2(-11, -1)
-polygon = PackedVector2Array(-22, -35, -24, -9, -2, 1, 24, 1, 46, -9, 44, -35, 32, -55, 32, -101, 11, -126, -10, -100, -10, -55)
-
 [node name="Camera2D" type="Camera2D" parent="RigidBody2D"]
 offset = Vector2(0, -300)
 
@@ -101,6 +92,15 @@ stream = ExtResource("5_kbr43")
 
 [node name="Pong" type="AudioStreamPlayer2D" parent="RigidBody2D"]
 stream = ExtResource("6_8ams2")
+
+[node name="Rocket" type="Sprite2D" parent="RigidBody2D"]
+position = Vector2(0, -63.425)
+scale = Vector2(0.1, 0.0993344)
+texture = ExtResource("2_8j81e")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RigidBody2D"]
+position = Vector2(-11, -1)
+polygon = PackedVector2Array(-22, -35, -24, -9, -2, 1, 24, 1, 46, -9, 44, -35, 32, -55, 32, -101, 11, -126, -10, -100, -10, -55)
 
 [node name="KillTimer" type="Timer" parent="."]
 one_shot = true

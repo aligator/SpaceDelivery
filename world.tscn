@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=16 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_kb1il"]
 [ext_resource type="PackedScene" uid="uid://bsm7lmyeoxad8" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://EnemyTimer.gd" id="5_3lj4j"]
 [ext_resource type="PackedScene" uid="uid://dbbqj2oy5haj5" path="res://objects/asteoroid.tscn" id="6_vqjo2"]
 [ext_resource type="Texture2D" uid="uid://c1hxe34ojo6jk" path="res://assets/background.svg" id="6_ynu3v"]
+[ext_resource type="Texture2D" uid="uid://dckkcjaay6lw1" path="res://assets/ground.svg" id="7_6frnl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ebwnq"]
 size = Vector2(35, 231)
@@ -76,11 +77,16 @@ var highscore: Variant
 @onready var highscoreInput: CanvasLayer = get_node(\"/root/World/Highscore\")
 
 @onready var http_request = HTTPRequest.new()
+@onready var globalVar = get_node(\"/root/GlobalVariables\")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_child(http_request)
 	http_request.request_completed.connect(self._on_request_completed)
+
+
+	if globalVar.username != \"\":
+		nameTextField.text = globalVar.username
 
 	pass # Replace with function body.
 
@@ -103,6 +109,8 @@ func _on_pressed():
 		nameTextField.placeholder_text = \"Invalid! Rules: [A-Za-z0-9 ]\"
 		return
 	
+	globalVar.username = username
+	
 	var body = JSON.new().stringify({\"Name\": username, \"Game\": \"unknown\", \"Score\": -world.maxHeight -1.20})
 
 	var error = http_request.request(\"http://score.edv-bitches.de\", PackedStringArray(), HTTPClient.METHOD_POST, body)
@@ -118,8 +126,10 @@ func _on_request_completed(result, response_code, headers, body):
 	highscoreInput.visible = false
 	highscoreList.visible = true
 	
-	
-	
+func _on_text_edit_text_changed():
+	if nameTextField.text.ends_with(\"\\n\"):
+		nameTextField.text = nameTextField.text.replace(\"\\n\", \"\")
+		_on_pressed()
 
 "
 
@@ -309,6 +319,19 @@ theme = ExtResource("3_o3j68")
 text = "RESTART"
 script = SubResource("GDScript_ngoo0")
 
+[node name="ParallaxGround" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxGround"]
+position = Vector2(2, 5)
+motion_mirroring = Vector2(2400, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxGround/ParallaxLayer"]
+texture_repeat = 2
+position = Vector2(0, -5)
+texture = ExtResource("7_6frnl")
+centered = false
+
 [connection signal="timeout" from="EnemyTimer" to="EnemyTimer" method="_on_timeout"]
+[connection signal="text_changed" from="Highscore/TextEdit" to="Highscore/Button" method="_on_text_edit_text_changed"]
 [connection signal="pressed" from="Highscore/Button" to="Highscore/Button" method="_on_pressed"]
 [connection signal="pressed" from="HighscoreList/RestartButton" to="HighscoreList/RestartButton" method="_on_pressed"]

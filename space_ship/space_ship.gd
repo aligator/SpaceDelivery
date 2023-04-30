@@ -36,6 +36,11 @@ func _physics_process(delta):
 	leftFire.emitting = false
 	rightFire.emitting = false
 	
+	if isDying:
+		powerSound.stop()
+		return
+		
+	
 	if rigid.gravity_scale > 1:
 		rigid.gravity_scale = 2 - (-rigid.position.y + 164) / 5000 
 	else: 
