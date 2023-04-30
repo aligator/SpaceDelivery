@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 var doMove: bool = false
+var type = "object"
 
 func _ready():
 	var onScreen = VisibleOnScreenNotifier2D.new()

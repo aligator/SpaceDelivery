@@ -97,7 +97,7 @@ func _on_pressed():
 	
 	var regex = RegEx.new()
 	regex.compile(\"^[A-Za-z0-9 ]+$\")
-	if !regex.search(\"name\"):
+	if !regex.search(username):
 		disabled = false
 		nameTextField.text = \"\"
 		nameTextField.placeholder_text = \"Invalid! Rules: [A-Za-z0-9 ]\"

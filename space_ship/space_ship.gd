@@ -8,6 +8,7 @@ extends Node2D
 @onready var explosion: CPUParticles2D = $RigidBody2D/Explosion
 @onready var peng: AudioStreamPlayer2D = $RigidBody2D/Peng
 @onready var powerSound: AudioStreamPlayer2D = $RigidBody2D/Power
+@onready var pongSound: AudioStreamPlayer2D = $RigidBody2D/Pong
 @onready var mainFire: CPUParticles2D = $RigidBody2D/MainFire
 @onready var leftFire: CPUParticles2D = $RigidBody2D/LeftFire
 @onready var rightFire: CPUParticles2D = $RigidBody2D/RightFire
@@ -84,3 +85,10 @@ func die():
 	
 func _on_kill_timer_timeout():
 	pass
+
+
+func _on_rigid_body_2d_body_entered(body):
+	if "type" in body:
+		if body.type == "object":
+			pongSound.play()
+

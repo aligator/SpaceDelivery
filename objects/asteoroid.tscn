@@ -7,6 +7,8 @@
 radius = 91.1976
 
 [node name="Asteoroid" type="RigidBody2D"]
+max_contacts_reported = 1
+contact_monitor = true
 script = ExtResource("1_7bn2k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
