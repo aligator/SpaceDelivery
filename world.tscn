@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=14 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_kb1il"]
 [ext_resource type="PackedScene" uid="uid://bsm7lmyeoxad8" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
@@ -8,12 +8,13 @@
 [ext_resource type="Texture2D" uid="uid://c1hxe34ojo6jk" path="res://assets/background.svg" id="6_ynu3v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ebwnq"]
-size = Vector2(2132, 231)
+size = Vector2(35, 231)
 
 [sub_resource type="GDScript" id="GDScript_p4vrl"]
 script/source = "extends ProgressBar
 
 @onready var spaceShip = get_node(\"/root/World/SpaceShip\")
+@onready var wr = weakref(spaceShip);
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,6 +24,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if (!wr.get_ref()):
+		return
 	value = spaceShip.fuel
 	pass
 "
@@ -31,6 +34,7 @@ func _process(delta):
 script/source = "extends Label
 
 @onready var spaceShip = get_node(\"/root/World/SpaceShip/RigidBody2D\")
+@onready var wr = weakref(spaceShip);
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -39,7 +43,120 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if (!wr.get_ref()):
+		return
+	
 	text = \"Height \" + str(-spaceShip.position.y -1.20).pad_decimals(2)
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_degwm"]
+script/source = "extends Label
+
+@onready var world = get_node(\"/root/World\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	text = \"Your score \" + str(-world.maxHeight -1.20).pad_decimals(2)
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_2415s"]
+script/source = "extends Button
+
+var highscore: Variant
+@onready var nameTextField: TextEdit = get_node(\"/root/World/Highscore/TextEdit\")
+@onready var world = get_node(\"/root/World\")
+@onready var highscoreList: CanvasLayer = get_node(\"/root/World/HighscoreList\")
+@onready var highscoreInput: CanvasLayer = get_node(\"/root/World/Highscore\")
+
+@onready var http_request = HTTPRequest.new()
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	add_child(http_request)
+	http_request.request_completed.connect(self._on_request_completed)
+
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+
+func _on_pressed():
+	disabled = true
+	
+	var username = nameTextField.text
+	
+	var regex = RegEx.new()
+	regex.compile(\"^[A-Za-z0-9 ]+$\")
+	if !regex.search(\"name\"):
+		disabled = false
+		nameTextField.text = \"\"
+		nameTextField.placeholder_text = \"Invalid! Rules: [A-Za-z0-9 ]\"
+		return
+	
+	var body = JSON.new().stringify({\"Name\": username, \"Game\": \"unknown\", \"Score\": -world.maxHeight -1.20})
+
+	var error = http_request.request(\"http://score.edv-bitches.de\", PackedStringArray(), HTTPClient.METHOD_POST, body)
+	print(\"err\", error)
+	pass
+
+func _on_request_completed(result, response_code, headers, body):
+	var json = JSON.new()
+	json.parse(body.get_string_from_utf8())
+	var response = json.get_data()
+	print(response)
+	highscore = response
+	highscoreInput.visible = false
+	highscoreList.visible = true
+	
+	
+	
+
+"
+
+[sub_resource type="GDScript" id="GDScript_ymu0u"]
+script/source = "extends Label
+
+@onready var world = get_node(\"/root/World\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	text = \"Your score \" + str(-world.maxHeight -1.20).pad_decimals(2)
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_583vw"]
+script/source = "extends Label
+
+@onready var highscoreButton = get_node(\"/root/World/Highscore/Button\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if highscoreButton.highscore == null:
+		return
+		
+	text = \"\"
+	for score in highscoreButton.highscore:
+		text += score.Name +  \": \" + str(score.Score).pad_decimals(2) + \"\\n\"
 	pass
 "
 
@@ -53,7 +170,7 @@ position = Vector2(528, 0)
 position = Vector2(306, 754)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(186, -640)
+position = Vector2(222.5, -640)
 shape = SubResource("RectangleShape2D_ebwnq")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
@@ -68,6 +185,7 @@ texture = ExtResource("6_ynu3v")
 centered = false
 
 [node name="UI" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI"]
 anchors_preset = 5
@@ -104,4 +222,64 @@ autostart = true
 script = ExtResource("5_3lj4j")
 objectScene = ExtResource("6_vqjo2")
 
+[node name="Highscore" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Highscore"]
+offset_top = 283.0
+offset_right = 1150.0
+offset_bottom = 363.0
+alignment = 1
+
+[node name="Height" type="Label" parent="Highscore/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_o3j68")
+text = "Your score"
+script = SubResource("GDScript_degwm")
+
+[node name="TextEdit" type="TextEdit" parent="Highscore"]
+offset_left = 95.0
+offset_top = 375.0
+offset_right = 1068.0
+offset_bottom = 465.0
+theme = ExtResource("3_o3j68")
+placeholder_text = "Your name [A-Za-z0-9 ]"
+context_menu_enabled = false
+wrap_mode = 1
+
+[node name="Button" type="Button" parent="Highscore"]
+offset_left = 432.0
+offset_top = 486.0
+offset_right = 711.0
+offset_bottom = 574.0
+theme = ExtResource("3_o3j68")
+text = "Submit"
+script = SubResource("GDScript_2415s")
+
+[node name="HighscoreList" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HighscoreList"]
+offset_top = 17.0
+offset_right = 1150.0
+offset_bottom = 97.0
+alignment = 1
+
+[node name="Height" type="Label" parent="HighscoreList/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_o3j68")
+text = "Your score"
+script = SubResource("GDScript_ymu0u")
+
+[node name="Scores" type="Label" parent="HighscoreList"]
+offset_left = 84.0
+offset_top = 98.0
+offset_right = 1088.0
+offset_bottom = 624.0
+theme = ExtResource("3_o3j68")
+theme_override_font_sizes/font_size = 28
+text = "asedf"
+script = SubResource("GDScript_583vw")
+
 [connection signal="timeout" from="EnemyTimer" to="EnemyTimer" method="_on_timeout"]
+[connection signal="pressed" from="Highscore/Button" to="Highscore/Button" method="_on_pressed"]

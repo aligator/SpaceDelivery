@@ -17,7 +17,6 @@ func spawn():
 	pass
 	
 func _on_timeout():
-	print(spaceShipRigid.position.y)
 	if spaceShipRigid.position.y > -1500:
 		return
 		

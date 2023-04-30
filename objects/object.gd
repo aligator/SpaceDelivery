@@ -8,6 +8,8 @@ func _ready():
 	onScreen.screen_exited.connect(_on_screen_exited)
 
 func _physics_process(delta):
+	if position.y > 0:
+		queue_free()
 	pass
 		
 func _on_screen_exited():
