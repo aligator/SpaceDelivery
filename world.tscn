@@ -1,26 +1,51 @@
-[gd_scene load_steps=5 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=6 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="PackedScene" uid="uid://bsm7lmyeoxad8" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
-[ext_resource type="PackedScene" uid="uid://kiq1e5hkw3ty" path="res://ui.tscn" id="2_vho4v"]
-[ext_resource type="Script" path="res://ParallaxBackground.gd" id="5_f7s1q"]
 [ext_resource type="Texture2D" uid="uid://c1hxe34ojo6jk" path="res://assets/background.svg" id="6_ynu3v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ebwnq"]
+size = Vector2(2132, 231)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_8b1qf"]
+normal = Vector2(-1, 0)
+distance = 0.01
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_k3jei"]
+normal = Vector2(1, 0)
+distance = 1152.0
 
 [node name="World" type="Node2D"]
 
 [node name="SpaceShip" parent="." instance=ExtResource("1_t2rh0")]
-position = Vector2(320, 835)
+position = Vector2(528, 0)
 
-[node name="UI" parent="." instance=ExtResource("2_vho4v")]
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(306, 754)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(186, -640)
+shape = SubResource("RectangleShape2D_ebwnq")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-script = ExtResource("5_f7s1q")
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(397, 610)
-motion_mirroring = Vector2(790, 2258)
+position = Vector2(2, 5)
+motion_mirroring = Vector2(2400, 2000)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
 texture_repeat = 2
-position = Vector2(-403, -610)
 texture = ExtResource("6_ynu3v")
 centered = false
+
+[node name="OutOfWorldLeft" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutOfWorldLeft"]
+shape = SubResource("WorldBoundaryShape2D_8b1qf")
+
+[node name="OutOfWorldRight" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutOfWorldRight"]
+shape = SubResource("WorldBoundaryShape2D_k3jei")
+
+[connection signal="body_exited" from="OutOfWorldLeft" to="SpaceShip" method="_on_area_2d_body_exited"]
+[connection signal="body_exited" from="OutOfWorldRight" to="SpaceShip" method="_on_area_2d_body_exited"]

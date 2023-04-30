@@ -1,64 +1,57 @@
-[gd_scene load_steps=9 format=3 uid="uid://bsm7lmyeoxad8"]
+[gd_scene load_steps=6 format=3 uid="uid://bsm7lmyeoxad8"]
 
 [ext_resource type="Script" path="res://space_ship/space_ship.gd" id="1_ibr4t"]
-[ext_resource type="PackedScene" uid="uid://batynujmyxnv7" path="res://space_ship/collision.tscn" id="1_nxlyw"]
-[ext_resource type="Script" path="res://space_ship/space_ship_body.gd" id="1_ypgme"]
 [ext_resource type="Texture2D" uid="uid://dcrmiuc6hbmpo" path="res://assets/rocket.png" id="2_8j81e"]
-[ext_resource type="Texture2D" uid="uid://hhxox2ym7exf" path="res://assets/red.png" id="4_3g2xk"]
+[ext_resource type="Texture2D" uid="uid://tdtqpe3kkual" path="res://assets/explosion.png" id="3_drwhd"]
+[ext_resource type="Script" path="res://space_ship/KillTimer.gd" id="4_dexqu"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_efwpq"]
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x1v6m"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_6oinw"]
-radius = 18.0
+[sub_resource type="Gradient" id="Gradient_c61kh"]
+offsets = PackedFloat32Array(0, 0.278932, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1)
 
 [node name="SpaceShip" type="Node2D"]
-position = Vector2(6, -320)
 script = ExtResource("1_ibr4t")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
-collision_mask = 5
-mass = 10.0
+inertia = 50.0
 center_of_mass_mode = 1
-center_of_mass = Vector2(0, -300)
-physics_material_override = SubResource("PhysicsMaterial_efwpq")
-script = ExtResource("1_ypgme")
 metadata/_edit_vertical_guides_ = []
 
 [node name="Rocket" type="Sprite2D" parent="RigidBody2D"]
-position = Vector2(-3, -28)
-scale = Vector2(0.705714, 0.781519)
+position = Vector2(0, -63.425)
+scale = Vector2(0.1, 0.0993344)
 texture = ExtResource("2_8j81e")
 
-[node name="CollisionPolygon2D" parent="RigidBody2D" instance=ExtResource("1_nxlyw")]
-position = Vector2(-3, 0)
-build_mode = 0
-polygon = PackedVector2Array(-233, -338, -3, -655, 230, -336, 115, -337, 0, -503, -128, -319, -129, -225, -129, -202, -3, -202, -3, -188, -129, -188, -128, -45, 128, -45, 128, -322, -5, -322, -5, -337, 115, -337, 230, -336, 284, -202, 257, -46, 217, 81, -222, 106, -254, 73, -233, -22, -233, -187)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RigidBody2D"]
+position = Vector2(-11, -1)
+polygon = PackedVector2Array(-22, -35, -24, -9, -2, 1, 24, 1, 46, -9, 44, -35, 32, -55, 32, -101, 11, -126, -10, -100, -10, -55)
 
-[node name="BottomCollision" parent="RigidBody2D" instance=ExtResource("1_nxlyw")]
-position = Vector2(-3, 0)
-build_mode = 0
-polygon = PackedVector2Array(41, 320, 41, 341, 41, 391, 25, 391, -45, 391, -45, 376, -45, 302, -25, 268, -5, 200, 14, 262, 41, 302, 41, 320, -25, 320.141, -25, 366, 20, 366, 20, 320)
+[node name="Camera2D" type="Camera2D" parent="RigidBody2D"]
+limit_left = 0
+limit_right = 1152
+limit_bottom = 0
 
-[node name="BottomCollision" type="StaticBody2D" parent="."]
-position = Vector2(-326, -670)
-collision_layer = 4
-collision_mask = 4
-physics_material_override = SubResource("PhysicsMaterial_x1v6m")
+[node name="Explosion" type="CPUParticles2D" parent="RigidBody2D"]
+position = Vector2(0, -56)
+emitting = false
+amount = 600
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+lifetime_randomness = 0.32
+texture = ExtResource("3_drwhd")
+emission_shape = 1
+emission_sphere_radius = 20.33
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 200.0
+scale_amount_min = 0.1
+scale_amount_max = 0.5
+color_ramp = SubResource("Gradient_c61kh")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomCollision"]
-position = Vector2(320, 1013)
-shape = SubResource("CircleShape2D_6oinw")
+[node name="KillTimer" type="Timer" parent="."]
+one_shot = true
+script = ExtResource("4_dexqu")
 
-[node name="Red" type="Sprite2D" parent="BottomCollision/CollisionShape2D"]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("4_3g2xk")
-
-[node name="PlacementArea" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 2
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlacementArea"]
-position = Vector2(-175, -389)
-polygon = PackedVector2Array(45, 69, 44, 344, 300, 344, 299, 69, 172, -113)
+[connection signal="timeout" from="KillTimer" to="." method="_on_kill_timer_timeout"]

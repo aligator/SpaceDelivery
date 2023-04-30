@@ -1,11 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://kiq1e5hkw3ty"]
+[gd_scene load_steps=3 format=3 uid="uid://kiq1e5hkw3ty"]
 
-[ext_resource type="Texture2D" uid="uid://gc8y7brk87ox" path="res://assets/ball.svg" id="1_6n8xg"]
 [ext_resource type="Script" path="res://ui.gd" id="1_q0ebk"]
-[ext_resource type="Script" path="res://spawner.gd" id="2_18c3w"]
-[ext_resource type="PackedScene" uid="uid://dykfwuv1coid1" path="res://objects/ball.tscn" id="3_ag06f"]
-[ext_resource type="Texture2D" uid="uid://bd48s2kywab0j" path="res://assets/box.svg" id="5_6iyxs"]
-[ext_resource type="PackedScene" uid="uid://bmncbnlwcrmk8" path="res://objects/box.tscn" id="5_a0nsx"]
 
 [sub_resource type="Theme" id="Theme_dxkmd"]
 default_font_size = 33
@@ -29,25 +24,4 @@ theme = SubResource("Theme_dxkmd")
 text = "Start
 "
 
-[node name="Spawners" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 156.0
-offset_bottom = 88.0
-
-[node name="BallSpawner" type="TextureButton" parent="Spawners"]
-layout_mode = 2
-texture_normal = ExtResource("1_6n8xg")
-script = ExtResource("2_18c3w")
-scene = ExtResource("3_ag06f")
-
-[node name="BoxSpawner" type="TextureButton" parent="Spawners"]
-layout_mode = 2
-texture_normal = ExtResource("5_6iyxs")
-script = ExtResource("2_18c3w")
-scene = ExtResource("5_a0nsx")
-
 [connection signal="pressed" from="StartButton" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="Spawners/BallSpawner" to="Spawners/BallSpawner" method="_on_pressed"]
-[connection signal="pressed" from="Spawners/BoxSpawner" to="Spawners/BoxSpawner" method="_on_pressed"]
