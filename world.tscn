@@ -111,7 +111,7 @@ func _on_pressed():
 	
 	globalVar.username = username
 	
-	var body = JSON.new().stringify({\"Name\": username, \"Game\": \"unknown\", \"Score\": -world.maxHeight -1.20})
+	var body = JSON.new().stringify({\"Name\": username, \"Game\": \"space\", \"Score\": -world.maxHeight -1.20})
 
 	var error = http_request.request(\"http://score.edv-bitches.de\", PackedStringArray(), HTTPClient.METHOD_POST, body)
 	print(\"err\", error)
