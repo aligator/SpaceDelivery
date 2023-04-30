@@ -6,6 +6,8 @@ extends Node2D
 @export var powerSide: float = 200
 @onready var rigid: RigidBody2D = $RigidBody2D
 @onready var explosion: CPUParticles2D = $RigidBody2D/Explosion
+@onready var peng: AudioStreamPlayer2D = $RigidBody2D/Peng
+@onready var powerSound: AudioStreamPlayer2D = $RigidBody2D/Power
 @onready var mainFire: CPUParticles2D = $RigidBody2D/MainFire
 @onready var leftFire: CPUParticles2D = $RigidBody2D/LeftFire
 @onready var rightFire: CPUParticles2D = $RigidBody2D/RightFire
@@ -57,13 +59,16 @@ func _physics_process(delta):
 	if fuel < 0:
 		fuel = 0
 
-#	if rigid.position.x <= -500 || rigid.position.x >= 570:
-#		die()
 	if rigid.position.y > 0:
 		die()
 		
 	if world.maxHeight > rigid.position.y:
 		world.maxHeight = rigid.position.y
+
+	if !powerSound.playing && (mainFire.emitting || leftFire.emitting || rightFire.emitting):
+		powerSound.play()
+	if powerSound.playing && !(mainFire.emitting || leftFire.emitting || rightFire.emitting):
+		powerSound.stop()
 	
 func die():
 	if isDying:
@@ -72,9 +77,10 @@ func die():
 	world.dead = true
 	rigid.freeze = true
 	isDying = true	
-	explosion.restart()	
+	explosion.restart()
+	peng.play()
 	killTimer.start()
-	texture.visible = true
+	texture.visible = false
 	
 func _on_kill_timer_timeout():
 	pass
