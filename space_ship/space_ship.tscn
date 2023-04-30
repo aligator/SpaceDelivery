@@ -26,9 +26,9 @@ position = Vector2(-11, -1)
 polygon = PackedVector2Array(-22, -35, -24, -9, -2, 1, 24, 1, 46, -9, 44, -35, 32, -55, 32, -101, 11, -126, -10, -100, -10, -55)
 
 [node name="Camera2D" type="Camera2D" parent="RigidBody2D"]
+offset = Vector2(0, -300)
 limit_left = 0
 limit_right = 1152
-limit_bottom = 0
 
 [node name="Explosion" type="CPUParticles2D" parent="RigidBody2D"]
 position = Vector2(0, -56)

@@ -22,10 +22,10 @@ func _process(delta):
 	pass
 
 func _physics_process(delta):
-	if rigid.gravity_scale > 0:
+	if rigid.gravity_scale > 0.5:
 		rigid.gravity_scale = 1 - (-rigid.position.y + 164) / 50000 
 	else: 
-		rigid.gravity_scale = 0
+		rigid.gravity_scale = 0.5
 
 	if Input.is_action_pressed("ui_up") && fuel > 0:
 		var direction = rigid.rotation + deg_to_rad(270)	
@@ -50,6 +50,7 @@ func die():
 	if isDying:
 		return
 	print("kill")
+	rigid.freeze = true
 	isDying = true
 	explosion.restart()
 	killTimer.start()

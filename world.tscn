@@ -1,7 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=9 format=3 uid="uid://dk7fauks4c8r6"]
 
+[ext_resource type="Script" path="res://world.gd" id="1_kb1il"]
 [ext_resource type="PackedScene" uid="uid://bsm7lmyeoxad8" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
 [ext_resource type="Theme" uid="uid://5k0w5l0f72d5" path="res://theme.tres" id="3_o3j68"]
+[ext_resource type="Script" path="res://EnemyTimer.gd" id="5_3lj4j"]
+[ext_resource type="PackedScene" uid="uid://dbbqj2oy5haj5" path="res://objects/asteoroid.tscn" id="6_vqjo2"]
 [ext_resource type="Texture2D" uid="uid://c1hxe34ojo6jk" path="res://assets/background.svg" id="6_ynu3v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ebwnq"]
@@ -25,6 +28,7 @@ func _process(delta):
 "
 
 [node name="World" type="Node2D"]
+script = ExtResource("1_kb1il")
 
 [node name="SpaceShip" parent="." instance=ExtResource("1_t2rh0")]
 position = Vector2(528, 0)
@@ -70,3 +74,11 @@ layout_mode = 2
 theme = ExtResource("3_o3j68")
 max_value = 30.0
 script = SubResource("GDScript_p4vrl")
+
+[node name="EnemyTimer" type="Timer" parent="."]
+process_callback = 0
+autostart = true
+script = ExtResource("5_3lj4j")
+objectScene = ExtResource("6_vqjo2")
+
+[connection signal="timeout" from="EnemyTimer" to="EnemyTimer" method="_on_timeout"]
