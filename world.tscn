@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=10 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_kb1il"]
 [ext_resource type="PackedScene" uid="uid://bsm7lmyeoxad8" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
@@ -24,6 +24,22 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	value = spaceShip.fuel
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_auh8j"]
+script/source = "extends Label
+
+@onready var spaceShip = get_node(\"/root/World/SpaceShip/RigidBody2D\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	text = \"Height \" + str(-spaceShip.position.y -1.20).pad_decimals(2)
 	pass
 "
 
@@ -63,7 +79,7 @@ offset_right = 20.0
 offset_bottom = 60.0
 grow_horizontal = 2
 
-[node name="Label" type="Label" parent="UI/HBoxContainer"]
+[node name="Fuel" type="Label" parent="UI/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_o3j68")
 text = "Fuel"
@@ -75,8 +91,15 @@ theme = ExtResource("3_o3j68")
 max_value = 30.0
 script = SubResource("GDScript_p4vrl")
 
+[node name="Height" type="Label" parent="UI/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_o3j68")
+text = "Height"
+script = SubResource("GDScript_auh8j")
+
 [node name="EnemyTimer" type="Timer" parent="."]
 process_callback = 0
+wait_time = 0.1
 autostart = true
 script = ExtResource("5_3lj4j")
 objectScene = ExtResource("6_vqjo2")

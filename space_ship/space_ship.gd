@@ -1,8 +1,9 @@
 extends Node2D
 
-@export var maxFuel: float = 120
-@export var fuel: float = 120
-@export var power: float = 1000
+@export var maxFuel: float = 100
+@export var fuel: float = 100
+@export var power: float = 1200
+@export var powerSide: float = 200
 @onready var rigid: RigidBody2D = $RigidBody2D
 @onready var explosion: CPUParticles2D = $RigidBody2D/Explosion
 @onready var killTimer: Timer = $KillTimer
@@ -22,28 +23,30 @@ func _process(delta):
 	pass
 
 func _physics_process(delta):
-	if rigid.gravity_scale > 0.5:
-		rigid.gravity_scale = 1 - (-rigid.position.y + 164) / 50000 
+	if rigid.gravity_scale > 1:
+		rigid.gravity_scale = 2 - (-rigid.position.y + 164) / 5000 
 	else: 
-		rigid.gravity_scale = 0.5
+		rigid.gravity_scale = 1
 
 	if Input.is_action_pressed("ui_up") && fuel > 0:
 		var direction = rigid.rotation + deg_to_rad(270)	
 		rigid.apply_force(Vector2(cos(direction), sin(direction)) * (power), rigid.center_of_mass)	
-		fuel-=delta
+		fuel-=delta * rigid.linear_velocity.length() / 200
 		
 	if Input.is_action_pressed("ui_left") && fuel > 0:
-		rigid.apply_torque(-100)
-		fuel-=delta
+		rigid.apply_torque(-powerSide)
+		fuel-=delta * rigid.linear_velocity.length() / 200
 		
 	if Input.is_action_pressed("ui_right") && fuel > 0:
-		rigid.apply_torque(100)
-		fuel-=delta
+		rigid.apply_torque(powerSide)
+		fuel-=delta * rigid.linear_velocity.length() / 200
 		
 	if fuel < 0:
 		fuel = 0
 
-	if rigid.position.x <= -500 || rigid.position.x >= 570:
+#	if rigid.position.x <= -500 || rigid.position.x >= 570:
+#		die()
+	if rigid.position.y > 0:
 		die()
 	
 func die():
