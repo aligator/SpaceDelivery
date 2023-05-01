@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dk7fauks4c8r6"]
+[gd_scene load_steps=17 format=3 uid="uid://dk7fauks4c8r6"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_kb1il"]
 [ext_resource type="PackedScene" uid="uid://bsm7lmyeoxad8" path="res://space_ship/space_ship.tscn" id="1_t2rh0"]
@@ -106,7 +106,6 @@ func _on_pressed():
 	if !regex.search(username):
 		disabled = false
 		nameTextField.text = \"\"
-		nameTextField.placeholder_text = \"Invalid! Rules: [A-Za-z0-9 ]\"
 		return
 	
 	globalVar.username = username
@@ -131,6 +130,15 @@ func _on_text_edit_text_changed():
 		nameTextField.text = nameTextField.text.replace(\"\\n\", \"\")
 		_on_pressed()
 
+"
+
+[sub_resource type="GDScript" id="GDScript_rreer"]
+script/source = "extends Button
+
+
+func _on_pressed():
+	get_tree().reload_current_scene()
+	pass # Replace with function body.
 "
 
 [sub_resource type="GDScript" id="GDScript_ymu0u"]
@@ -252,7 +260,6 @@ script = ExtResource("5_3lj4j")
 objectScene = ExtResource("6_vqjo2")
 
 [node name="Highscore" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Highscore"]
 offset_top = 283.0
@@ -277,13 +284,22 @@ context_menu_enabled = false
 wrap_mode = 1
 
 [node name="Button" type="Button" parent="Highscore"]
-offset_left = 432.0
-offset_top = 486.0
-offset_right = 711.0
-offset_bottom = 574.0
+offset_left = 268.0
+offset_top = 497.0
+offset_right = 547.0
+offset_bottom = 585.0
 theme = ExtResource("3_o3j68")
 text = "Submit"
 script = SubResource("GDScript_2415s")
+
+[node name="Restart" type="Button" parent="Highscore"]
+offset_left = 565.0
+offset_top = 496.0
+offset_right = 844.0
+offset_bottom = 584.0
+theme = ExtResource("3_o3j68")
+text = "Next Round!"
+script = SubResource("GDScript_rreer")
 
 [node name="HighscoreList" type="CanvasLayer" parent="."]
 visible = false
@@ -334,4 +350,5 @@ centered = false
 [connection signal="timeout" from="EnemyTimer" to="EnemyTimer" method="_on_timeout"]
 [connection signal="text_changed" from="Highscore/TextEdit" to="Highscore/Button" method="_on_text_edit_text_changed"]
 [connection signal="pressed" from="Highscore/Button" to="Highscore/Button" method="_on_pressed"]
+[connection signal="pressed" from="Highscore/Restart" to="Highscore/Restart" method="_on_pressed"]
 [connection signal="pressed" from="HighscoreList/RestartButton" to="HighscoreList/RestartButton" method="_on_pressed"]
